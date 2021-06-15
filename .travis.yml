@@ -16,6 +16,7 @@ script:
 
 # Send notification to mail
 notifications:
+  slack: edysan:uVMsPpX5xZiFfh3Y7J8UrnOu
   email:
     reciepients:
       - j3045771061@gmail.com
