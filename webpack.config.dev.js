@@ -1,12 +1,11 @@
 const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
 
 module.exports = {
+  // entry: ['./src/index.js'],
+  // entry: ['react-hot-loader/patch', './src/index.js'],
   entry: {
     home: './src/index.js',
     header: './src/Header/index.js',
@@ -68,6 +67,10 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 3006,
+    // hot: true,
   },
   plugins: [
     new HtmlWebPackPlugin({
@@ -77,7 +80,6 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: 'assets/[name].css',
     }),
-    new CleanWebpackPlugin(),
     new ImageMinimizerPlugin({
       minimizerOptions: {
         plugins: [['optipng', { optimizationLevel: 5 }]],
@@ -85,32 +87,8 @@ module.exports = {
     }),
   ],
   optimization: {
-    minimize: true,
-    minimizer: [new CssMinimizerPlugin(), new TerserPlugin()],
     splitChunks: {
       chunks: 'all',
-      cacheGroups: {
-        default: false,
-        commons: {
-          // Elements for read resource
-          test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-          chunks: 'all',
-          name: 'commons',
-          filename: 'assets/common.[chunkhash].js',
-          reuseExistingChunk: true,
-          enforce: true,
-          priority: 20,
-        },
-        vendors: {
-          test: /[\\/]node_modules[\\/]/,
-          chunks: 'all',
-          name: 'vendors',
-          filename: 'assets/vendor.[chunkhash].js',
-          reuseExistingChunk: true,
-          enforce: true,
-          priority: 10,
-        },
-      },
     },
   },
 };
